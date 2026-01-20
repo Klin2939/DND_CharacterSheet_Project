@@ -204,15 +204,29 @@
       </h2>
       </div>
 
-        <div class="inventory">
+      <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'Actions')">Actions</button>
+        <button class="tablinks" onclick="openCity(event, 'Skills')">Skills</button>
+        <button class="tablinks" onclick="openCity(event, 'Inventory')">Inventory</button>
+      </div>
+
+      <div id="Actions" class="tabcontent">
+        <h3>Stuff</h3>
+      </div>
+
+      <div id="Skills" class="tabcontent">
+        <h3>Stuff</h3>
+      </div>
+
+      <div id="Inventory" class="tabcontent">
         <input id="itemSearch" type="text">
         <select name="filter" id="filter">
             <option value="Weapons">Weapons</option>
             <option value="Armor">Armor</option>
             <option value="Magic Items">Magic Items</option>
         </select>
-        <div id="inventoryList"></div>
-    </div>
+      </div>
+
     
 
 
