@@ -113,7 +113,7 @@ document.getElementById("submit").addEventListener('click', function(){
 
 function modCalc(score) {
     mod = (score - 10) / 2
-    if (mod <= 0){
+    if (mod == 0){
       return `${mod}`
     }
     if (isInt(mod) == true){
@@ -144,6 +144,52 @@ function isInt(n) {
   }
  }
 
-  function updateACDisplay() {
+function updateACDisplay() {
   document.getElementById('armorClass').textContent = `${armorClass}`;
 }
+
+function getmain() {
+  let fgMain = fetchJSON('http://127.0.0.1:5000')
+  console.log(fgMain)
+}
+
+function fetchJSON(url) {
+    return fetch(url)
+        .then(response => response.json())
+        .catch((error) => {
+            console.log(error);
+        });
+}
+function GetuserSats(){
+  let userSats = newCac
+  console.log(userSats)
+
+  return userSats
+}
+function Savestats(){
+  let statvar = GetuserSats()
+  console.log(statvar)
+
+  fetch("http://127.0.0.1:5000/save",{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(statvar)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Success:', data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+
+getmain()
