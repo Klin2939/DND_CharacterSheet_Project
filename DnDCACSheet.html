@@ -204,30 +204,29 @@
       </h2>
       </div>
 
-      <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'Actions')">Actions</button>
-        <button class="tablinks" onclick="openCity(event, 'Skills')">Skills</button>
-        <button class="tablinks" onclick="openCity(event, 'Inventory')">Inventory</button>
-      </div>
+  <div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'London')">London</button>
+    <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
+    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+  </div>
 
-      <div id="Actions" class="tabcontent">
-        <h3>Stuff</h3>
-      </div>
+  <!-- Tab content -->
+  <div id="London" class="tabcontent">
+    <h3>London</h3>
+    <p>London is the capital city of England.</p>
+  </div>
 
-      <div id="Skills" class="tabcontent">
-        <h3>Stuff</h3>
-      </div>
+  <div id="Paris" class="tabcontent">
+    <h3>Paris</h3>
+    <p>Paris is the capital of France.</p>
+  </div>
 
-      <div id="Inventory" class="tabcontent">
-        <input id="itemSearch" type="text">
-        <select name="filter" id="filter">
-            <option value="Weapons">Weapons</option>
-            <option value="Armor">Armor</option>
-            <option value="Magic Items">Magic Items</option>
-        </select>
-      </div>
+  <div id="Tokyo" class="tabcontent">
+    <h3>Tokyo</h3>
+    <p>Tokyo is the capital of Japan.</p>
+  </div>
 
-      <button id = "save" onclick="Savestats()">Save Stats</button>
+      <button id = "save" onclick="Savestats()">Save Character</button>
     
 
 
