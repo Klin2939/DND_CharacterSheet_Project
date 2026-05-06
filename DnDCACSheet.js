@@ -116,12 +116,6 @@ function modCalc(score) {
     if (mod == 0){
       return `${mod}`
     }
-    if (isInt(mod) == true){
-        return `+${mod}`
-    } else {
-        return `+${mod - .5}`
-    }
-    
 }
 function isInt(n) {
     return n % 1 === 0;
@@ -193,3 +187,92 @@ function Savestats(){
 
 
 getmain()
+
+// ===== TAB FUNCTIONALITY =====
+function openCity(evt, cityName) {
+  const tabContents = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabContents.length; i++) {
+    tabContents[i].style.display = "none";
+  }
+
+  const tabLinks = document.getElementsByClassName("tablinks");
+  for (let i = 0; i < tabLinks.length; i++) {
+    tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// Show first tab by default on page load
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById("Actions").style.display = "block";
+  document.querySelector('.tablinks').classList.add('active');
+});
+
+// ===== INVENTORY MANAGEMENT =====
+let inventory = [];
+
+function addItem() {
+  const itemName = prompt("Enter item name:");
+  if (!itemName) return;
+  
+  const itemType = prompt("Enter item type (Weapons/Armor/Magic Items/Consumables):", "Consumables");
+  const quantity = prompt("Enter quantity:", "1");
+  
+  const item = {
+    name: itemName,
+    type: itemType || "Consumables",
+    quantity: quantity || 1
+  };
+  
+  inventory.push(item);
+  renderInventory();
+}
+
+function removeItem(index) {
+  inventory.splice(index, 1);
+  renderInventory();
+}
+
+function renderInventory() {
+  const inventoryList = document.getElementById("inventoryList");
+  const filterValue = document.getElementById("filter").value;
+  
+  let filteredItems = inventory;
+  if (filterValue !== "All") {
+    filteredItems = inventory.filter(item => item.type === filterValue);
+  }
+  
+  if (filteredItems.length === 0) {
+    inventoryList.innerHTML = "<p>No items in inventory. Add items to get started.</p>";
+    return;
+  }
+  
+  let html = "<table class='inventory-table'><tr><th>Item</th><th>Type</th><th>Quantity</th><th>Action</th></tr>";
+  filteredItems.forEach((item, index) => {
+    const originalIndex = inventory.indexOf(item);
+    html += `<tr>
+      <td>${item.name}</td>
+      <td>${item.type}</td>
+      <td><input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${originalIndex}, this.value)"></td>
+      <td><button onclick="removeItem(${originalIndex})">Remove</button></td>
+    </tr>`;
+  });
+  html += "</table>";
+  
+  inventoryList.innerHTML = html;
+}
+
+function updateQuantity(index, newQuantity) {
+  inventory[index].quantity = newQuantity;
+  renderInventory();
+}
+
+// Filter inventory on filter change
+document.addEventListener('DOMContentLoaded', function() {
+  const filterSelect = document.getElementById("filter");
+  if (filterSelect) {
+    filterSelect.addEventListener('change', renderInventory);
+  }
+});

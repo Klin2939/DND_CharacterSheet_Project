@@ -30,23 +30,24 @@
       <option>18</option>
       <option>19</option>
       <option>20</option>
-  </select>
-<h3 class = "CAC info">Class:
-  <select id = "CAC Class">
-    <option>Barbarian</option>
-    <option>Bard</option>
-    <option>Cleric</option>
-    <option>Druid</option>
-    <option>Fighter</option>
-    <option>Monk</option>
-    <option>Paladin</option>
-    <option>Ranger</option>
-    <option>Rogue</option>
-    <option>Sorcerer</option>
-    <option>Warlock</option>
-    <option>Wizard</option>
-</select>
-</h3>
+    </select>
+  </h3>
+  <h3 class = "CAC info">Class:
+    <select id = "CAC Class">
+      <option>Barbarian</option>
+      <option>Bard</option>
+      <option>Cleric</option>
+      <option>Druid</option>
+      <option>Fighter</option>
+      <option>Monk</option>
+      <option>Paladin</option>
+      <option>Ranger</option>
+      <option>Rogue</option>
+      <option>Sorcerer</option>
+      <option>Warlock</option>
+      <option>Wizard</option>
+    </select>
+  </h3>
   <div class="AbilityScores"> 
     <label for="strength">Str:</label>
     <span class="modifier" id = "str">0</span> 
@@ -85,146 +86,161 @@
 
     <input type ="button" value="Submit" id = "submit">
 
-  <table>
-    <tr>
-      <th>Prof</th>
-      <th>Skills</th>
-      <th>Mod</th>
-    </tr>
-    <tr>
-      <td><input type="checkbox"></td>
-      <td>Athletics</td>
-      <td class = "strSkill">0</td>
-    </tr>
-    <tr>
-      <td><input type="checkbox"></td>
-      <td>Animal Handling</td>
-      <td class = "wisSkill">0</td>
-    </tr>
-      <td><input type="checkbox"></th>
-      <td>Arcana</th>
-      <td class = "intSkill">0</th>
-    </tr>
-    <tr>
-      <td><input type="checkbox"></td>
-      <td>Acrobatics</td>
-      <td class = "dexSkill">0</td>
-    </tr>
-    <tr>
-      <td><input type="checkbox"></td>
-      <td>Deception</td>
-      <td class = "charSkill">0</td>
-    </tr>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>History</td>
-    <td class = "intSkill">0</td>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Insight</td>
-    <td class = "wisSkill">0</td>
-  </tr>
-    <td><input type="checkbox"></th>
-    <td>Intimidation</th>
-    <td class = "charSkill">0</th>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Investigation</td>
-    <td class = "intSkill">0</td>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Medicine</td>
-    <td class = "wisSkill">0</td>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Nature</td>
-    <td class = "intSkill">0</td>
-  </tr>
-    <td><input type="checkbox"></th>
-    <td>Perception</th>
-    <td class = "wisSkill">0</th>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Performance</td>
-    <td class = "charSkill">0</td>
-  </tr>
-  <tr>
-    <td><input type="checkbox"></td>
-    <td>Persuasion</td>
-    <td class = "charSkill">0</td>
-  </tr>
-</tr>
-<tr>
-  <td><input type="checkbox"></td>
-  <td>Religion</td>
-  <td class = "intSkill">0</td>
-</tr>
-<tr>
-  <td><input type="checkbox"></td>
-  <td>Sleight of Hand</td>
-  <td class = "dexSkill">0</td>
-</tr>
-  <td><input type="checkbox"></th>
-  <td>Stealth</th>
-  <td class = "dexSkill">0</th>
-</tr>
-<tr>
-  <td><input type="checkbox"></td>
-  <td>Survival</td>
-  <td class = "wisSkill">0</td>
-</tr>
-  </table>
-
-    <div class="hit-point-box">
-      <div class="Hit_Points">
-        <div class="button_column">
-          <button id="Life" onclick="increaseLife()">+</button>
-          <button id="Damage" onclick="decreaseLife()">-</button>
+    <div class="side-panel">
+      <div class="hit-point-box">
+        <div class="Hit_Points">
+          <div class="button_column">
+            <button id="Life" onclick="increaseLife()">+</button>
+            <button id="Damage" onclick="decreaseLife()">-</button>
+          </div>
+          <div class="hit-point-main">
+            <h2>
+              Hit Points <br>
+              <span id="hitPoints">0/0</span>
+            </h2>
+            <input type="number" id="quantity">
+          </div>
         </div>
-        <div class="hit-point-main">
-          <h2>
-            Hit Points <br>
-            <span id="hitPoints">0/0</span>
-          </h2>
-          <input type="number" id="quantity">
-        </div>
+      </div>
+      
+      <div class="armor-class-main">
+        <h2>
+          AC <br>
+          <span id="armorClass">10</span>
+        </h2>
       </div>
     </div>
-    
-    <div class="armor-class-main">
-      <h2>
-        AC <br>
-        <span id="armorClass">10</span>
-      </h2>
-      </div>
 
-      <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'Actions')">Actions</button>
-        <button class="tablinks" onclick="openCity(event, 'Skills')">Skills</button>
-        <button class="tablinks" onclick="openCity(event, 'Inventory')">Inventory</button>
-      </div>
+    <div class="tab">
+      <button class="tablinks" onclick="openCity(event, 'Actions')">Actions</button>
+      <button class="tablinks" onclick="openCity(event, 'Skills')">Skills</button>
+      <button class="tablinks" onclick="openCity(event, 'Inventory')">Inventory</button>
+    </div>
 
       <div id="Actions" class="tabcontent">
-        <h3>Stuff</h3>
+        <h3>Attack Rolls</h3>
+        <div id="attacksContainer">
+          <p>No attacks configured. Add ability scores and weapons to see attacks here.</p>
+        </div>
       </div>
 
       <div id="Skills" class="tabcontent">
-        <h3>Stuff</h3>
+        <h3>Skill Checks</h3>
+        <table class="skills-table">
+          <tr>
+            <th>Prof</th>
+            <th>Skills</th>
+            <th>Mod</th>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Athletics</td>
+            <td class="strSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Animal Handling</td>
+            <td class="wisSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Arcana</td>
+            <td class="intSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Acrobatics</td>
+            <td class="dexSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Deception</td>
+            <td class="charSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>History</td>
+            <td class="intSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Insight</td>
+            <td class="wisSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Intimidation</td>
+            <td class="charSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Investigation</td>
+            <td class="intSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Medicine</td>
+            <td class="wisSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Nature</td>
+            <td class="intSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Perception</td>
+            <td class="wisSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Performance</td>
+            <td class="charSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Persuasion</td>
+            <td class="charSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Religion</td>
+            <td class="intSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Sleight of Hand</td>
+            <td class="dexSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Stealth</td>
+            <td class="dexSkill">0</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="prof-checkbox"></td>
+            <td>Survival</td>
+            <td class="wisSkill">0</td>
+          </tr>
+        </table>
       </div>
 
       <div id="Inventory" class="tabcontent">
-        <input id="itemSearch" type="text">
-        <select name="filter" id="filter">
+        <h3>Inventory</h3>
+        <div class="inventory-search">
+          <input id="itemSearch" type="text" placeholder="Search items...">
+          <select id="filter">
+            <option value="All">All Items</option>
             <option value="Weapons">Weapons</option>
             <option value="Armor">Armor</option>
             <option value="Magic Items">Magic Items</option>
-        </select>
+            <option value="Consumables">Consumables</option>
+          </select>
+          <button onclick="addItem()">Add Item</button>
+        </div>
+        <div id="inventoryList">
+          <p>No items in inventory. Add items to get started.</p>
+        </div>
       </div>
 
       <button id = "save" onclick="Savestats()">Save Stats</button>
