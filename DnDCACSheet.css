@@ -86,155 +86,44 @@ body {
     border-style: double;
     background-color: #f9f9f9;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    flex: 1;
-    min-width: 150px;
-    text-align: center;
-}
+    right: 0;
+    margin-top: -450px;
+    margin-right: 1000px;
+    display: inline-block; 
+    position: absolute;
+  }
 
-/* TAB CONTAINER */
 .tab {
-  display: flex;
-  border-bottom: 2px solid #ccc;
-  margin-top: 30px;
-  margin-bottom: 0;
-  gap: 5px;
-  background-color: #f1f1f1;
-  padding: 10px;
-  border-radius: 8px 8px 0 0;
-}
-
-/* TAB LINKS */
-.tablinks {
-  background-color: #f1f1f1;
+  overflow: hidden;
   border: 1px solid #ccc;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 4px 4px 0 0;
-  margin-right: 5px;
+  background-color: #f1f1f1;
 }
 
-.tablinks:hover {
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
   background-color: #ddd;
 }
 
-.tablinks.active {
-  background-color: #4CAF50;
-  color: white;
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
 }
 
+/* Style the tab content */
 .tabcontent {
   display: none;
-  padding: 20px;
+  padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  border-radius: 0 0 4px 4px;
-  background-color: #fafafa;
-  margin-top: 10px;
-}
-
-.tabcontent h3 {
-  margin-top: 0;
-  color: #333;
-}
-
-/* SKILLS TABLE STYLES */
-.skills-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.skills-table th,
-.skills-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-.skills-table th {
-  background-color: #4CAF50;
-  color: white;
-  font-weight: bold;
-}
-
-.skills-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.skills-table input[type="checkbox"] {
-  cursor: pointer;
-}
-
-/* INVENTORY STYLES */
-.inventory-search {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-
-.inventory-search input,
-.inventory-search select {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.inventory-search button {
-  padding: 8px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.inventory-search button:hover {
-  background-color: #45a049;
-}
-
-.inventory-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.inventory-table th,
-.inventory-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-.inventory-table th {
-  background-color: #4CAF50;
-  color: white;
-  font-weight: bold;
-}
-
-.inventory-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.inventory-table input[type="number"] {
-  width: 80px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.inventory-table button {
-  padding: 6px 12px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.inventory-table button:hover {
-  background-color: #da190b;
 }
