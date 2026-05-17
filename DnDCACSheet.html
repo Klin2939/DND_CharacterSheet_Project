@@ -8,6 +8,7 @@
 <!--<input id="level" type="number" min="1" max="20"></h3>-->
 <body>
   <h1><input id = "CAC Name" value = "Character Name" > Character Sheet</h1>
+  
   <h3 class = "CAC info">Level:
     <select id = "level">
       <option>1</option>
@@ -32,6 +33,7 @@
       <option>20</option>
     </select>
   </h3>
+
   <h3 class = "CAC info">Class:
     <select id = "CAC Class">
       <option>Barbarian</option>
@@ -48,6 +50,7 @@
       <option>Wizard</option>
     </select>
   </h3>
+
   <div class="AbilityScores"> 
     <label for="strength">Str:</label>
     <span class="modifier" id = "str">0</span> 
@@ -111,11 +114,6 @@
       </div>
     </div>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-    <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-  </div>
     <div class="tab">
       <button class="tablinks" onclick="openCity(event, 'Actions')">Actions</button>
       <button class="tablinks" onclick="openCity(event, 'Skills')">Skills</button>
@@ -123,10 +121,6 @@
     </div>
 
   <!-- Tab content -->
-  <div id="London" class="tabcontent">
-    <h3>London</h3>
-    <p>London is the capital city of England.</p>
-  </div>
       <div id="Actions" class="tabcontent">
         <h3>Attack Rolls</h3>
         <div id="attacksContainer">
@@ -134,10 +128,6 @@
         </div>
       </div>
 
-  <div id="Paris" class="tabcontent">
-    <h3>Paris</h3>
-    <p>Paris is the capital of France.</p>
-  </div>
       <div id="Skills" class="tabcontent">
         <h3>Skill Checks</h3>
         <table class="skills-table">
