@@ -1,3 +1,5 @@
+// Character model for the sheet data.
+// Stores the character name, class, level, and ability scores.
 class Character {
     constructor(CACName = "NameNA", Class = "NA", Level = 1, Str = 0, Dex = 0, Con = 0, Int = 0, Wis = 0, Char = 0){
         this.CACName = CACName;
@@ -11,16 +13,22 @@ class Character {
         this.Char = Char;
     }
 
+    // Update the character name from the form.
     setName(value) {
         this.CACName = value;
       }
+
+      // Update the selected character class from the form.
       setClass(value) {
         this.Class = value;
       }
+
+      // Update the selected character level from the form.
       setLevel(value) {
         this.Level = value;
       }
     
+      // Set all ability scores at once from the inputs.
       setAbiScore(strScore, dexScore, conScore, intScore, wisScore, charScore) {
         this.Str = strScore;
         this.Dex = dexScore;
@@ -29,26 +37,41 @@ class Character {
         this.Wis = wisScore;
         this.Char = charScore;
       }
+
+    setHitDie(){
+      if (this.Class === "Barbarian"){
+        let die = 12;
+    }else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
+        let die = 10;
+    }else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid"|| this.Class === "Rogue" || this.Class === "Warlock"||this.Class === "Monk"){
+        let die = 8;
+    }else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
+        let die = 6;
     }
+}
+}
 
 const newCac = new Character()
 
-
+// Listen for the submit button click and update character state from the form.
 document.getElementById("submit").addEventListener('click', function(){
     let cacName = document.getElementById('CAC Name').value
     console.log(cacName)
     newCac.setName(cacName);
 })
+
 document.getElementById("submit").addEventListener('click', function(){
     let cacClass = document.getElementById("CAC Class").value
     console.log(cacClass)
     newCac.setClass(cacClass);
 })
+
 document.getElementById("submit").addEventListener('click', function(){
     let cacLevel = document.getElementById('level').value
     console.log(cacLevel)
     newCac.setLevel(cacLevel);
 })
+
 document.getElementById("submit").addEventListener('click', function(){
     let strScore = document.getElementById('strength').value;
     console.log(strScore)
@@ -73,6 +96,8 @@ document.getElementById("submit").addEventListener('click', function(){
     strID.forEach(element => {
         element.innerHTML = sMod;
       });
+
+
     let dMod = modCalc(dexScore)
     console.log(dMod)
     document.getElementById("dex").innerHTML = dMod;
@@ -80,6 +105,8 @@ document.getElementById("submit").addEventListener('click', function(){
     dexID.forEach(element => {
         element.innerHTML = dMod;
       });
+
+
     let cMod = modCalc(conScore)
     console.log(cMod)
     document.getElementById("con").innerHTML = cMod;
@@ -87,6 +114,8 @@ document.getElementById("submit").addEventListener('click', function(){
     conID.forEach(element => {
         element.innerHTML = cMod;
       });
+
+
     let iMod = modCalc(intScore)
     console.log(iMod)
     document.getElementById("int").innerHTML = iMod;
@@ -94,6 +123,8 @@ document.getElementById("submit").addEventListener('click', function(){
     intID.forEach(element => {
         element.innerHTML = iMod;
       });
+
+
     let wMod = modCalc(wisScore)
     console.log(wMod)
     document.getElementById("wis").innerHTML = wMod;
@@ -101,6 +132,8 @@ document.getElementById("submit").addEventListener('click', function(){
     wisID.forEach(element => {
         element.innerHTML = wMod;
       });
+
+
     let chMod = modCalc(charScore)
     console.log(chMod)
     document.getElementById("char").innerHTML = chMod;
@@ -109,8 +142,11 @@ document.getElementById("submit").addEventListener('click', function(){
         element.innerHTML = chMod;
       });
 
+    updateACDisplay()
+
 })
 
+// Tab navigation helper: hides all tab panels and shows the selected one.
 function openCity(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;
@@ -132,19 +168,33 @@ function openCity(evt, cityName) {
   evt.currentTarget.className += " active";
 }
 
+// Compute the D&D ability modifier from an ability score.
+// The formula is floor((score - 10) / 2), with special handling for 10.
 function modCalc(score) {
-    mod = (score - 10) / 2
-    if (mod == 0){
-      return `${mod}`
+    // Check if input is numerical
+    let numScore = Number(score);
+    if (isNaN(numScore)) {
+        return "Invalid"; // or handle error
     }
+    
+    // If input is 10, return 0
+    if (numScore === 10) {
+        return "0";
+    }
+    
+    // Calculate modifier: subtract 10, divide by 2, round down
+    let mod = Math.floor((numScore - 10) / 2);
+    
+    // Return with a sign for positive values
+    return mod >= 0 ? `+${mod}` : `${mod}`;
 }
-function isInt(n) {
-    return n % 1 === 0;
- }
- function updateLifeDisplay() {
+
+// Refresh the hit point display whenever current or total HP changes.
+function updateLifeDisplay() {
   document.getElementById('hitPoints').textContent = `${currentHP}/${maxHP}`;
 }
 
+// Increase current HP by one, up to the total HP cap.
  function increaseLife() {
   if (hitPoint < totalHP){
     hitPoint++;
@@ -152,6 +202,7 @@ function isInt(n) {
   }
  }
  
+// Decrease current HP by one, not below zero.
  function decreaseLife() {
   if (hitPoint > 0){
     hitPoint--;
@@ -159,15 +210,20 @@ function isInt(n) {
   }
  }
 
+// Update the Armor Class display using the current Dexterity modifier.
 function updateACDisplay() {
+  let armorClass = 10 + Number(modCalc(newCac.Dex));
   document.getElementById('armorClass').textContent = `${armorClass}`;
 }
 
+// Fetch startup data from the local backend.
+// This can be used to prefill any data or verify the backend is reachable.
 function getmain() {
   let fgMain = fetchJSON('http://127.0.0.1:5000')
   console.log(fgMain)
 }
 
+// Helper to fetch JSON from a URL and log errors if the request fails.
 function fetchJSON(url) {
     return fetch(url)
         .then(response => response.json())
@@ -175,12 +231,16 @@ function fetchJSON(url) {
             console.log(error);
         });
 }
+
+// Return the current character state object for saving.
 function GetuserSats(){
   let userSats = newCac
   console.log(userSats)
 
   return userSats
 }
+
+// Save the current character data to the backend server.
 function Savestats(){
   let statvar = GetuserSats()
   console.log(statvar)
@@ -207,9 +267,11 @@ function Savestats(){
 }
 
 
+// Load initial backend data when the script first runs.
 getmain()
 
 // ===== TAB FUNCTIONALITY =====
+// Show and hide tab panes in the UI when the user clicks a tab button.
 function openCity(evt, cityName) {
   const tabContents = document.getElementsByClassName("tabcontent");
   for (let i = 0; i < tabContents.length; i++) {
@@ -235,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
 let inventory = [];
 
 function addItem() {
+  // Ask the user for inventory item details.
   const itemName = prompt("Enter item name:");
   if (!itemName) return;
   
