@@ -37,7 +37,19 @@ class Character {
         this.Wis = wisScore;
         this.Char = charScore;
       }
+
+    setHitDie(){
+      if (this.Class === "Barbarian"){
+        let die = 12;
+    }else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
+        let die = 10;
+    }else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid"|| this.Class === "Rogue" || this.Class === "Warlock"||this.Class === "Monk"){
+        let die = 8;
+    }else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
+        let die = 6;
     }
+}
+}
 
 const newCac = new Character()
 
