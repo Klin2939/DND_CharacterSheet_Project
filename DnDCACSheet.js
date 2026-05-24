@@ -38,17 +38,18 @@ class Character {
         this.Char = charScore;
       }
 
-    setHitDie(){
-      if (this.Class === "Barbarian"){
-        let die = 12;
-    }else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
-        let die = 10;
-    }else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid"|| this.Class === "Rogue" || this.Class === "Warlock"||this.Class === "Monk"){
-        let die = 8;
-    }else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
-        let die = 6;
+      setHitDie(){
+        if (this.Class === "Barbarian"){
+          let die = 12;
+      }else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
+          let die = 10;
+      }else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid"|| this.Class === "Rogue" || this.Class === "Warlock"||this.Class === "Monk"){
+          let die = 8;
+      }else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
+          let die = 6;
+      }
     }
-}
+ 
 }
 
 const newCac = new Character()
@@ -144,6 +145,7 @@ document.getElementById("submit").addEventListener('click', function(){
 
     updateACDisplay()
 
+    setMaxHP()
 })
 
 // Tab navigation helper: hides all tab panels and shows the selected one.
@@ -189,16 +191,29 @@ function modCalc(score) {
     return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
+function setMaxHP(){
+  let hitDie = newCac.setHitDie();
+
+  if (newCac.Level === 1){
+    const MAXHP = hitDie + Number(modCalc(newCac.Con));
+    console.log(MAXHP)
+  }else if (newCac.Level > 1){
+    const MAXHP = MAXHP + (Math.floor(Math.random(hitDie)) * (newCac.Level - 1)) + Number(modCalc(newCac.Con));
+    console.log(MAXHP)
+  }
+
+    updateLifeDisplay(MAXHP)
+ }
 // Refresh the hit point display whenever current or total HP changes.
-function updateLifeDisplay() {
-  document.getElementById('hitPoints').textContent = `${currentHP}/${maxHP}`;
+function updateLifeDisplay(currentHP) {
+  document.getElementById('hitPoints').textContent = `${currentHP}/${MAXHP}`;
 }
 
 // Increase current HP by one, up to the total HP cap.
  function increaseLife() {
-  if (hitPoint < totalHP){
+  if (hitPoint < MAXHP){
     hitPoint++;
-    updateLifeDisplay() 
+    updateLifeDisplay(hitPoint) 
   }
  }
  
@@ -206,7 +221,7 @@ function updateLifeDisplay() {
  function decreaseLife() {
   if (hitPoint > 0){
     hitPoint--;
-    updateLifeDisplay() 
+    updateLifeDisplay(hitPoint) 
   }
  }
 
