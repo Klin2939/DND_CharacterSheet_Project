@@ -1,5 +1,5 @@
 // Character model for the sheet data.
-// Stores the character name, class, level, and ability scores.
+// Stores the character name, class, level, ability scores, and HP.
 class Character {
     constructor(CACName = "NameNA", Class = "NA", Level = 1, Str = 0, Dex = 0, Con = 0, Int = 0, Wis = 0, Char = 0){
         this.CACName = CACName;
@@ -11,6 +11,8 @@ class Character {
         this.Int = Int;
         this.Wis = Wis;
         this.Char = Char;
+        this.maxHP = 0;
+        this.currentHP = 0;
     }
 
     // Update the character name from the form.
@@ -38,17 +40,39 @@ class Character {
         this.Char = charScore;
       }
 
-      setHitDie(){
+      // Get the hit die size based on class.
+      getHitDie(){
         if (this.Class === "Barbarian"){
-          let die = 12;
-      }else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
-          let die = 10;
-      }else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid"|| this.Class === "Rogue" || this.Class === "Warlock"||this.Class === "Monk"){
-          let die = 8;
-      }else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
-          let die = 6;
+          return 12;
+        } else if (this.Class === "Fighter" || this.Class === "Paladin" || this.Class === "Ranger"){
+          return 10;
+        } else if (this.Class === "Bard" || this.Class === "Cleric" || this.Class === "Druid" || this.Class === "Rogue" || this.Class === "Warlock" || this.Class === "Monk"){
+          return 8;
+        } else if (this.Class === "Sorcerer" || this.Class === "Wizard"){
+          return 6;
+        }
+        return 6; // default fallback
       }
-    }
+
+      // Calculate and set max HP based on class, level, and constitution modifier.
+      calculateMaxHP(){
+        let hitDie = this.getHitDie();
+        let conMod = modCalc(this.Con);
+        
+        if (this.Level === 1){
+          this.maxHP = hitDie + Number(conMod);
+        } else {
+          // First level gets full hit die + con mod
+          this.maxHP = hitDie + Number(conMod);
+          // Additional levels get average of hit die (rounded down) + con mod
+          let dieRoll = Math.floor(Math.random() * hitDie) + 1; // Simulate rolling the hit die for each level
+          this.maxHP += (dieRoll + Number(conMod)) * (this.Level - 1);
+        }
+        
+        // Set current HP to max when calculating for the first time
+        this.currentHP = this.maxHP;
+        return this.maxHP;
+      }
  
 }
 
@@ -145,7 +169,8 @@ document.getElementById("submit").addEventListener('click', function(){
 
     updateACDisplay()
 
-    setMaxHP()
+    newCac.calculateMaxHP();
+    updateLifeDisplay()
 })
 
 // Tab navigation helper: hides all tab panels and shows the selected one.
@@ -191,39 +216,26 @@ function modCalc(score) {
     return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
-function setMaxHP(){
-  let hitDie = newCac.setHitDie();
-
-  if (newCac.Level === 1){
-    const MAXHP = hitDie + Number(modCalc(newCac.Con));
-    console.log(MAXHP)
-  }else if (newCac.Level > 1){
-    const MAXHP = MAXHP + (Math.floor(Math.random(hitDie)) * (newCac.Level - 1)) + Number(modCalc(newCac.Con));
-    console.log(MAXHP)
-  }
-
-    updateLifeDisplay(MAXHP)
- }
 // Refresh the hit point display whenever current or total HP changes.
-function updateLifeDisplay(currentHP) {
-  document.getElementById('hitPoints').textContent = `${currentHP}/${MAXHP}`;
+function updateLifeDisplay() {
+  document.getElementById('hitPoints').textContent = `${newCac.currentHP}/${newCac.maxHP}`;
 }
 
 // Increase current HP by one, up to the total HP cap.
- function increaseLife() {
-  if (hitPoint < MAXHP){
-    hitPoint++;
-    updateLifeDisplay(hitPoint) 
+function increaseLife() {
+  if (newCac.currentHP < newCac.maxHP){
+    newCac.currentHP++;
+    updateLifeDisplay();
   }
- }
- 
+}
+
 // Decrease current HP by one, not below zero.
- function decreaseLife() {
-  if (hitPoint > 0){
-    hitPoint--;
-    updateLifeDisplay(hitPoint) 
+function decreaseLife() {
+  if (newCac.currentHP > 0){
+    newCac.currentHP--;
+    updateLifeDisplay();
   }
- }
+}
 
 // Update the Armor Class display using the current Dexterity modifier.
 function updateACDisplay() {
