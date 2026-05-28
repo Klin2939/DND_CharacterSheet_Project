@@ -149,7 +149,7 @@ document.getElementById("submit").addEventListener('click', function(){
 })
 
 // Tab navigation helper: hides all tab panels and shows the selected one.
-function openCity(evt, cityName) {
+function openTab(evt, tabName) {
   // Declare all variables
   var i, tabcontent, tablinks;
 
@@ -166,7 +166,7 @@ function openCity(evt, cityName) {
   }
 
   // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
 
@@ -287,7 +287,7 @@ getmain()
 
 // ===== TAB FUNCTIONALITY =====
 // Show and hide tab panes in the UI when the user clicks a tab button.
-function openCity(evt, cityName) {
+function openTab(evt, tabName) {
   const tabContents = document.getElementsByClassName("tabcontent");
   for (let i = 0; i < tabContents.length; i++) {
     tabContents[i].style.display = "none";
@@ -298,7 +298,7 @@ function openCity(evt, cityName) {
     tabLinks[i].className = tabLinks[i].className.replace(" active", "");
   }
 
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
 
