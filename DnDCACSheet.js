@@ -4,6 +4,7 @@ class Character {
     constructor(CACName = "NameNA", Class = "NA", Level = 1, Str = 0, Dex = 0, Con = 0, Int = 0, Wis = 0, Char = 0){
         this.CACName = CACName;
         this.Class = Class;
+        this.Race = "NA";
         this.Level = Level;
         this.Str = Str;
         this.Dex = Dex;
@@ -23,6 +24,11 @@ class Character {
       // Update the selected character class from the form.
       setClass(value) {
         this.Class = value;
+      }
+
+      // Update the selected character race from the form.
+      setRace(value) {
+        this.Race = value;
       }
 
       // Update the selected character level from the form.
@@ -89,6 +95,18 @@ document.getElementById("submit").addEventListener('click', function(){
     let cacClass = document.getElementById("CAC Class").value
     console.log(cacClass)
     newCac.setClass(cacClass);
+})
+
+document.getElementById("submit").addEventListener('click', function(){
+    let cacClass = document.getElementById("CAC Class").value
+    console.log(cacClass)
+    newCac.setClass(cacClass);
+})
+
+document.getElementById("submit").addEventListener('click', function(){
+    let cacRace = document.getElementById("race").value
+    console.log(cacRace)
+    newCac.setRace(cacRace);
 })
 
 document.getElementById("submit").addEventListener('click', function(){
