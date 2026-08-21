@@ -1,0 +1,64 @@
+[
+  {
+    "CACName": "Thorne",
+    "Class": "Fighter",
+    "Race": "NA",
+    "Level": "4",
+    "Str": "16",
+    "Dex": "12",
+    "Con": "14",
+    "Int": "10",
+    "Wis": "11",
+    "Char": "8",
+    "maxHP": 30,
+    "currentHP": 30,
+    "hitDie": -1,
+    "hpRolls": [
+      12,
+      6,
+      6,
+      6
+    ]
+  },
+  {
+    "CACName": "Mira",
+    "Class": "Wizard",
+    "Race": "NA",
+    "Level": "1",
+    "Str": "8",
+    "Dex": "14",
+    "Con": "12",
+    "Int": "17",
+    "Wis": "10",
+    "Char": "11",
+    "maxHP": 6,
+    "currentHP": 6,
+    "hitDie": -1,
+    "hpRolls": [
+      6
+    ]
+  },
+  {
+    "CACName": "Batman",
+    "Class": "Rogue",
+    "Race": "Human",
+    "Level": "4",
+    "Str": "14",
+    "Dex": "15",
+    "Con": "14",
+    "Int": "17",
+    "Wis": "15",
+    "Char": "12",
+    "maxHP": 34,
+    "currentHP": 34,
+    "hitDie": -1,
+    "hpRolls": [
+      10,
+      10,
+      5,
+      9,
+      4,
+      8
+    ]
+  }
+]

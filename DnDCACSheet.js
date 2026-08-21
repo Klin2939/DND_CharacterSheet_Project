@@ -14,6 +14,8 @@ class Character {
         this.Char = Char;
         this.maxHP = 0;
         this.currentHP = 0;
+        this.hitDie = -1;
+        this.hpRolls = [];
     }
 
     // Update the character name from the form.
@@ -63,19 +65,22 @@ class Character {
       // Calculate and set max HP based on class, level, and constitution modifier.
       calculateMaxHP(){
         let hitDie = this.getHitDie();
-        let conMod = modCalc(this.Con);
-        
-        if (this.Level === 1){
-          this.maxHP = hitDie + Number(conMod);
-        } else {
-          // First level gets full hit die + con mod
-          this.maxHP = hitDie + Number(conMod);
-          // Additional levels get average of hit die (rounded down) + con mod
-          let dieRoll = Math.floor(Math.random() * hitDie) + 1; // Simulate rolling the hit die for each level
-          this.maxHP += (dieRoll + Number(conMod)) * (this.Level - 1);
+        let conMod = Number(modCalc(this.Con));
+        let level = Number(this.Level);
+
+        if (this.hpRolls.length === 0) {
+          let level1HP = Math.max(1, hitDie + conMod); // Ensure at least 1 HP at level 1
+          this.hpRolls.push(level1HP);
+        } 
+
+        while(this.hpRolls.length < level) {
+          let dieRoll = Math.floor(Math.random() * hitDie) + 1; // Roll the hit die
+          let levelHP = Math.max(1, dieRoll + conMod); // Ensure at least 1 HP per level
+          this.hpRolls.push(levelHP);
         }
         
         // Set current HP to max when calculating for the first time
+        this.maxHP = this.hpRolls.slice(0, level).reduce((total, hp) => total + hp, 0);
         this.currentHP = this.maxHP;
         return this.maxHP;
       }
