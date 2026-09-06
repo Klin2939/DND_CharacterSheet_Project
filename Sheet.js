@@ -191,9 +191,11 @@ document.getElementById("submit").addEventListener('click', function(){
       });
 
     updateACDisplay()
+    updateProfBonusDisplay()
 
     newCac.calculateMaxHP();
     updateLifeDisplay()
+    renderAttacks()
 })
 
 // Tab navigation helper: hides all tab panels and shows the selected one.
@@ -264,6 +266,11 @@ function decreaseLife() {
 function updateACDisplay() {
   let armorClass = 10 + Number(modCalc(newCac.Dex));
   document.getElementById('armorClass').textContent = `${armorClass}`;
+}
+
+// Update the Proficiency Bonus display based on the current level.
+function updateProfBonusDisplay() {
+  document.getElementById('profBonus').textContent = `+${getProfBonus(newCac.Level)}`;
 }
 
 // Fetch startup data from the local backend.
@@ -346,27 +353,150 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== INVENTORY MANAGEMENT =====
 let inventory = [];
 
-function addItem() {
-  // Ask the user for inventory item details.
-  const itemName = prompt("Enter item name:");
-  if (!itemName) return;
-  
-  const itemType = prompt("Enter item type (Weapons/Armor/Magic Items/Consumables):", "Consumables");
-  const quantity = prompt("Enter quantity:", "1");
-  
-  const item = {
-    name: itemName,
-    type: itemType || "Consumables",
-    quantity: quantity || 1
-  };
-  
-  inventory.push(item);
+// D&D proficiency bonus by character level.
+function getProfBonus(level) {
+  level = Number(level);
+  if (level >= 17) return 6;
+  if (level >= 13) return 5;
+  if (level >= 9) return 4;
+  if (level >= 5) return 3;
+  return 2;
+}
+
+// Render the Actions tab's attack list from inventory items typed "Weapons".
+function renderAttacks() {
+  const attacksContainer = document.getElementById("attacksContainer");
+  const weapons = inventory.filter(item => item.type === "Weapons");
+
+  if (weapons.length === 0) {
+    attacksContainer.innerHTML = "<p>No attacks configured. Add ability scores and weapons to see attacks here.</p>";
+    return;
+  }
+
+  let html = "<table class='inventory-table'><tr><th>Weapon</th><th>Bonus</th><th>Damage</th></tr>";
+  weapons.forEach(weapon => {
+    const abilityScore = weapon.ability === "dex" ? newCac.Dex : newCac.Str;
+    const abilityMod = Number(modCalc(abilityScore));
+    const profBonus = weapon.proficient ? getProfBonus(newCac.Level) : 0;
+    const attackBonus = abilityMod + profBonus;
+    const bonusDisplay = attackBonus >= 0 ? `+${attackBonus}` : `${attackBonus}`;
+    const damageModDisplay = abilityMod >= 0 ? `+${abilityMod}` : `${abilityMod}`;
+
+    html += `<tr>
+      <td>${weapon.name}</td>
+      <td>${bonusDisplay}</td>
+      <td>${weapon.damage} ${damageModDisplay} ${weapon.damageType}</td>
+    </tr>`;
+  });
+  html += "</table>";
+
+  attacksContainer.innerHTML = html;
+}
+
+// Predefined items shown in the "Add Item" catalog picker.
+const ITEM_CATALOG = [
+  { name: "Dagger", type: "Weapons", damage: "1d4", damageType: "piercing", ability: "dex" },
+  { name: "Shortsword", type: "Weapons", damage: "1d6", damageType: "piercing", ability: "dex" },
+  { name: "Rapier", type: "Weapons", damage: "1d8", damageType: "piercing", ability: "dex" },
+  { name: "Longsword", type: "Weapons", damage: "1d8", damageType: "slashing", ability: "str" },
+  { name: "Greatsword", type: "Weapons", damage: "2d6", damageType: "slashing", ability: "str" },
+  { name: "Battleaxe", type: "Weapons", damage: "1d8", damageType: "slashing", ability: "str" },
+  { name: "Handaxe", type: "Weapons", damage: "1d6", damageType: "slashing", ability: "str" },
+  { name: "Warhammer", type: "Weapons", damage: "1d8", damageType: "bludgeoning", ability: "str" },
+  { name: "Mace", type: "Weapons", damage: "1d6", damageType: "bludgeoning", ability: "str" },
+  { name: "Quarterstaff", type: "Weapons", damage: "1d6", damageType: "bludgeoning", ability: "str" },
+  { name: "Spear", type: "Weapons", damage: "1d6", damageType: "piercing", ability: "str" },
+  { name: "Shortbow", type: "Weapons", damage: "1d6", damageType: "piercing", ability: "dex" },
+  { name: "Longbow", type: "Weapons", damage: "1d8", damageType: "piercing", ability: "dex" },
+  { name: "Light Crossbow", type: "Weapons", damage: "1d8", damageType: "piercing", ability: "dex" },
+
+  { name: "Leather Armor", type: "Armor", description: "Light armor, +1 AC" },
+  { name: "Chain Shirt", type: "Armor", description: "Medium armor, +3 AC" },
+  { name: "Chain Mail", type: "Armor", description: "Heavy armor, +6 AC" },
+  { name: "Shield", type: "Armor", description: "+2 AC" },
+
+  { name: "Potion of Healing", type: "Magic Items", description: "Restores 2d4+2 HP" },
+  { name: "Bag of Holding", type: "Magic Items", description: "Extradimensional storage space" },
+  { name: "Wand of Magic Missiles", type: "Magic Items", description: "Casts magic missile" },
+  { name: "Ring of Protection", type: "Magic Items", description: "+1 AC and saving throws" },
+  { name: "Cloak of Elvenkind", type: "Magic Items", description: "Advantage on Stealth checks" },
+
+  { name: "Rations (1 day)", type: "Consumables", description: "One day of food" },
+  { name: "Torch", type: "Consumables", description: "Provides light" },
+  { name: "Rope (50 ft)", type: "Consumables", description: "50 feet of hempen rope" },
+  { name: "Arrows (20)", type: "Consumables", description: "Ammunition for bows" },
+];
+
+// Items currently shown in the catalog modal, indexed for addCatalogItem().
+let catalogFilteredItems = [];
+
+function openCatalogModal() {
+  document.getElementById("catalogFilter").value = "All";
+  document.getElementById("catalogSearch").value = "";
+  renderCatalog();
+  document.getElementById("itemCatalogModal").style.display = "flex";
+}
+
+function closeCatalogModal() {
+  document.getElementById("itemCatalogModal").style.display = "none";
+}
+
+// Render the catalog modal's item list, filtered by type and name search.
+function renderCatalog() {
+  const catalogList = document.getElementById("catalogList");
+  const filterValue = document.getElementById("catalogFilter").value;
+  const searchValue = document.getElementById("catalogSearch").value.toLowerCase();
+
+  let items = ITEM_CATALOG;
+  if (filterValue !== "All") {
+    items = items.filter(item => item.type === filterValue);
+  }
+  if (searchValue) {
+    items = items.filter(item => item.name.toLowerCase().includes(searchValue));
+  }
+
+  catalogFilteredItems = items;
+
+  if (items.length === 0) {
+    catalogList.innerHTML = "<p>No items match your search.</p>";
+    return;
+  }
+
+  let html = "<table class='inventory-table'><tr><th>Item</th><th>Type</th><th>Details</th><th>Action</th></tr>";
+  items.forEach((item, index) => {
+    const details = item.type === "Weapons" ? `${item.damage} ${item.damageType}` : (item.description || "");
+    html += `<tr>
+      <td>${item.name}</td>
+      <td>${item.type}</td>
+      <td>${details}</td>
+      <td><button onclick="addCatalogItem(${index})">Add</button></td>
+    </tr>`;
+  });
+  html += "</table>";
+
+  catalogList.innerHTML = html;
+}
+
+// Add the selected catalog item into inventory with a default quantity of 1.
+function addCatalogItem(index) {
+  const catalogItem = catalogFilteredItems[index];
+  if (!catalogItem) return;
+
+  inventory.push(Object.assign({ quantity: 1 }, catalogItem));
   renderInventory();
+  renderAttacks();
+}
+
+// Toggle whether a weapon in inventory is used with proficiency.
+function toggleProficiency(index, isProficient) {
+  inventory[index].proficient = isProficient;
+  renderAttacks();
 }
 
 function removeItem(index) {
   inventory.splice(index, 1);
   renderInventory();
+  renderAttacks();
 }
 
 function renderInventory() {
@@ -383,13 +513,17 @@ function renderInventory() {
     return;
   }
   
-  let html = "<table class='inventory-table'><tr><th>Item</th><th>Type</th><th>Quantity</th><th>Action</th></tr>";
+  let html = "<table class='inventory-table'><tr><th>Item</th><th>Type</th><th>Quantity</th><th>Prof</th><th>Action</th></tr>";
   filteredItems.forEach((item, index) => {
     const originalIndex = inventory.indexOf(item);
+    const profCell = item.type === "Weapons"
+      ? `<input type="checkbox" ${item.proficient ? "checked" : ""} onchange="toggleProficiency(${originalIndex}, this.checked)">`
+      : "";
     html += `<tr>
       <td>${item.name}</td>
       <td>${item.type}</td>
       <td><input type="number" value="${item.quantity}" min="1" onchange="updateQuantity(${originalIndex}, this.value)"></td>
+      <td>${profCell}</td>
       <td><button onclick="removeItem(${originalIndex})">Remove</button></td>
     </tr>`;
   });

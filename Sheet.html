@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>D&D Character Sheet</title>
-  <link rel="stylesheet" href="DnDCACSheet.css">
+  <link rel="stylesheet" href="Sheet.css">
 </head>
 <!--<input id="level" type="number" min="1" max="20"></h3>-->
 <body>
@@ -124,6 +124,13 @@
         <h2>
           AC <br>
           <span id="armorClass">10</span>
+        </h2>
+      </div>
+
+      <div class="proficiency-bonus">
+        <h2>
+          Proficiency Bonus <br>
+          <span id="profBonus">+2</span>
         </h2>
       </div>
     </div>
@@ -254,10 +261,28 @@
             <option value="Magic Items">Magic Items</option>
             <option value="Consumables">Consumables</option>
           </select>
-          <button onclick="addItem()">Add Item</button>
+          <button onclick="openCatalogModal()">Add Item</button>
         </div>
         <div id="inventoryList">
           <p>No items in inventory. Add items to get started.</p>
+        </div>
+      </div>
+
+      <div id="itemCatalogModal" class="modal">
+        <div class="modal-content">
+          <span class="modal-close" onclick="closeCatalogModal()">&times;</span>
+          <h3>Add Item</h3>
+          <div class="inventory-search">
+            <input id="catalogSearch" type="text" placeholder="Search items..." oninput="renderCatalog()">
+            <select id="catalogFilter" onchange="renderCatalog()">
+              <option value="All">All Items</option>
+              <option value="Weapons">Weapons</option>
+              <option value="Armor">Armor</option>
+              <option value="Magic Items">Magic Items</option>
+              <option value="Consumables">Consumables</option>
+            </select>
+          </div>
+          <div id="catalogList"></div>
         </div>
       </div>
 
@@ -265,6 +290,6 @@
     
 
 
-  <script src="DnDCACSheet.js"></script>
+  <script src="Sheet.js"></script>
 </body>
 </html>
