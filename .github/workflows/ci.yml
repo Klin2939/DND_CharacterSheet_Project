@@ -1,0 +1,67 @@
+# CI for the D&D Character Sheet.
+# Runs on every push to main and on every pull request into main.
+# GitHub shows a ✅ or ❌ next to each commit/PR based on the result.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Syntax checks and tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get a copy of the repo onto the runner.
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # 2. Python for the Flask API (match your local 3.13).
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      # 3. Node for checking/testing Sheet.js.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # 4. Fast syntax checks: catch typos before anything else runs.
+      - name: Check Python syntax
+        run: python -m py_compile api/main.py
+
+      - name: Check JavaScript syntax
+        run: |
+          for f in Frontend/Scripts/*.js; do
+            echo "Checking $f"
+            node --check "$f"
+          done
+
+      # 5. Tests. Each step is skipped (not failed) until tests of that kind exist.
+      - name: Run Python tests
+        run: |
+          if ls Tests/test_*.py >/dev/null 2>&1; then
+            python -m pytest Tests -v
+          else
+            echo "No Python tests yet (Tests/test_*.py) - skipping."
+          fi
+
+      - name: Run JavaScript tests
+        run: |
+          if ls Tests/*.test.mjs >/dev/null 2>&1; then
+            node --test Tests/*.test.mjs
+          else
+            echo "No JavaScript tests yet (Tests/*.test.mjs) - skipping."
+          fi

@@ -10,15 +10,33 @@ An interactive D&D character sheet: a static HTML/CSS/vanilla-JS frontend (in `F
 
 Frontend: open `Frontend/Sheet.html` directly in a browser, or serve `Frontend/` statically. It hardcodes API calls to `http://127.0.0.1:5000`, so the backend must be running on that host/port for save to work. (`Frontend/Home.html`, `Scripts/Home.js` and `Stylesheets/Home.css` are empty placeholders for a future home page.)
 
-Backend — run from inside `api/`:
+Backend — install dependencies from the repo root (`requirements.txt` lives there), then run Flask from inside `api/`:
 ```
-cd api
 python3 -m pip install -r requirements.txt
+cd api
 python3 -m flask --app main --debug run
 ```
-This runs on `127.0.0.1:5000` with CORS enabled (`flask-cors`) so the page (opened via `file://` or a different port) can call it. `main.py` opens `"stats.json"` by a relative path, so starting Flask from any other directory writes a new `stats.json` there instead of `api/stats.json`.
+This runs on `127.0.0.1:5000` with CORS enabled (`flask-cors`) so the page (opened via `file://` or a different port) can call it. `main.py` resolves `api/stats.json` via the module-level `STATS_FILE` (absolute, based on `__file__`), read at request time so tests can `monkeypatch.setattr(main, "STATS_FILE", tmp_path / "stats.json")` instead of touching the real file.
 
-There is no test suite, linter, or build command. `Tests/` exists but is empty.
+## Checks and tests
+
+There's no linter or build step. CI (`.github/workflows/ci.yml`, on push/PR to `main`) runs the same checks you can run locally:
+```
+python3 -m py_compile api/main.py
+node --check Frontend/Scripts/Sheet.js
+python3 -m pytest Tests -v              # only if Tests/test_*.py exist
+node --test Tests/*.test.mjs            # only if Tests/*.test.mjs exist
+```
+Single test: `python3 -m pytest Tests/test_x.py::test_name` or `node --test --test-name-pattern="name" Tests/x.test.mjs`. CI only picks up tests matching those naming patterns. `pytest` isn't in `requirements.txt` — install it separately (it's in the project `.venv`). `Tests/conftest.py` puts `api/` on `sys.path`. `Sheet.js` is a plain browser script (no exports, touches the DOM at top level), so JS tests load it via `Tests/helpers/loadSheet.mjs` (runs it in `node:vm` with a stub `document`/`fetch` and returns `modCalc`, `getProfBonus`, `Character`, `newCac`, etc.); new top-level `const`/`let`/`class` names must be added to its `LEXICAL_EXPORTS` to be reachable. See `Tests/README.md`.
+
+## Planning and working rules
+
+`Documentation/Planning/` holds `Backlog.md`, `Sprint-Plan.md` and `Retrospective.md`; the README's to-do list mirrors the sprint plan. Ground rules from the sprint plan that apply to Claude/agents:
+- Every 🔴 Must task (B1, B2, P1, P2, P3, R1) is implemented by the human developer — agents may write tests for or review them, but don't implement them.
+- Agents don't commit; leave changes in the working tree for the developer to try and commit.
+- Only one party edits `Sheet.js` at a time — agent edits to it happen only in each sprint's "agent window".
+
+Project subagents live in `.claude/agents/` (`game-app-dev`, `test-writer`, `code-reviewer`, `project-manager`).
 
 ## Architecture
 
@@ -34,7 +52,7 @@ There is no test suite, linter, or build command. `Tests/` exists but is empty.
 - Persistence: `Savestats()` (the `#save` button) serializes `newCac` and `POST`s it to `/save`; `getmain()` does a `GET /` on load purely as a reachability check.
 
 **Backend (`api/main.py`)** — single-file Flask app:
-- `POST /save` upserts the posted character into `stats.json` (a JSON array of `Character` objects), matched/replaced by `CACName`. There's no character id — renaming a character creates a new entry rather than updating the old one.
+- `POST /save` rejects a non-object body or a missing/blank `CACName` with 400 `{"error": ...}`; otherwise it upserts the posted character into `stats.json` (a JSON array of `Character` objects), matched/replaced by `CACName`. There's no character id — renaming a character creates a new entry rather than updating the old one.
 - No endpoint to read characters back; `stats.json` is written but never loaded by the frontend.
 
 ## Known rough edges worth knowing before changing things
